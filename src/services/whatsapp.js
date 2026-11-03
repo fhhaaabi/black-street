@@ -5,11 +5,19 @@ export const isWhatsAppConfigured = () =>
   /^\d{8,15}$/.test(shop.whatsappNumber);
 
 /** Construit le message de commande à partir de lignes {name, colorName, size, sizeLabel, quantity, price}. */
-export function buildOrderMessage(lines) {
+export function buildOrderMessage(lines, customer = null) {
   // Adresse publique du site (shop.siteUrl) : permet d'ajouter un lien vers la photo et la fiche de chaque article.
   // WhatsApp ne peut PAS joindre une image via un lien wa.me : on envoie donc des liens (WhatsApp affiche l'aperçu).
   const base = String(shop.siteUrl || "").replace(/\/+$/, "");
   const out = ["Bonjour, je souhaite passer une commande.", ""];
+  if (customer)
+    out.push(
+      "Mes coordonnées",
+      `- Nom : ${customer.name}`,
+      `- Téléphone : ${customer.phone}`,
+      `- Adresse : ${customer.address}`,
+      "",
+    );
   let subtotal = 0;
   lines.forEach((l, i) => {
     const lineTotal = l.price * l.quantity;
