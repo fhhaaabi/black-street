@@ -287,7 +287,6 @@ const rows = [
     57,
     130,
   ],
-  ,
   [
     "Lacoste polo",
     "vetements",
@@ -304,7 +303,6 @@ const rows = [
     57,
     130,
   ],
-
   [
     "Ensemble pull cortez",
     "vetements",
@@ -449,7 +447,6 @@ const rows = [
     57,
     130,
   ],
-  ,
   [
     "Chrome",
     "vetements",
@@ -466,7 +463,6 @@ const rows = [
     57,
     130,
   ],
-  ,
   [
     "Bape",
     "vetements",
@@ -483,7 +479,6 @@ const rows = [
     57,
     130,
   ],
-  ,
   [
     "Ensemble casa",
     "vetements",
@@ -500,7 +495,6 @@ const rows = [
     57,
     130,
   ],
-  ,
   [
     "Ensemble pull cortez",
     "vetements",
@@ -517,7 +511,6 @@ const rows = [
     57,
     130,
   ],
-
   // ---------------- Pantalons ----------------
   [
     "Pantalon jogging",
@@ -1550,8 +1543,8 @@ function build(row, k) {
     colors,
   };
 }
-
-export const products = rows.map(build);
+export const products = rows.filter(Array.isArray).map(build);
 export const getProductBySlug = (slug) =>
-  products.find((p) => p.slug === slug) || null;
-export const getProductById = (id) => products.find((p) => p.id === id) || null;
+  products.find((p) => p && p.slug === slug) || null;
+export const getProductById = (id) =>
+  products.find((p) => p && p.id === id) || null;
