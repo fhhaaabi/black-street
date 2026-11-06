@@ -96,9 +96,9 @@ const floats = [
           <p class="text-secondary" style="max-width: 44ch">Couleurs, tailles, pointures : choisissez votre variante, vérifiez la photo exacte, puis envoyez votre commande en un seul message.</p>
           <RouterLink to="/boutique" class="btn btn-ink">Explorer la boutique</RouterLink>
         </div>
-        <div class="collage">
+        <!-- <div class="collage">
           <RouterLink v-for="c in collage" :key="c.p.id" :to="`/produit/${c.p.slug}`" :aria-label="c.p.name"><img :src="c.src" :alt="c.p.name" loading="lazy" width="800" height="800" @error="onImgError" /></RouterLink>
-        </div>
+        </div> -->
       </div>
     </section>
 
@@ -108,6 +108,13 @@ const floats = [
         <ProductSlider :products="picks" label="Nos sélections" autoplay />
       </div>
     </section>
+
+     <!-- <section v-if="picks.length" class="section" aria-labelledby="picks-title">
+      <div class="container">
+        <div class="section-head"><div><h2 id="picks-title">Pour femme</h2><p>Le choix de la boutique</p></div><RouterLink to="/boutique" class="link-more">Tout voir</RouterLink></div>
+        <ProductSlider :products="picks" label="Nos sélections" autoplay />
+      </div>
+    </section> -->
 
     <section v-if="promos.length" class="section" aria-labelledby="promo-title">
       <div class="container">
