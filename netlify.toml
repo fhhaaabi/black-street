@@ -1,8 +1,19 @@
+
+
 [build]
   command = "npm run build"
   publish = "dist"
 
-# Vue Router (mode historique) : toutes les URL renvoient vers index.html
+[functions]
+  directory = "netlify/functions"
+
+# Envoi des commandes (fonction Netlify → Telegram)
+[[redirects]]
+  from = "/api/order"
+  to = "/.netlify/functions/order"
+  status = 200
+
+# Vue Router (mode historique) : toutes les autres URL renvoient vers index.html
 [[redirects]]
   from = "/*"
   to = "/index.html"

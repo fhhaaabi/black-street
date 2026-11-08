@@ -1,6 +1,7 @@
 <script setup>
 import { shop } from '../config/shop.js'
 import { categories } from '../data/categories.js'
+import { collections } from '../data/collections.js'
 import { buildChatUrl, isWhatsAppConfigured } from '../services/whatsapp.js'
 const s = shop.seller
 </script>
@@ -18,6 +19,7 @@ const s = shop.seller
           <h3>Boutique</h3>
           <ul>
             <li v-for="c in categories" :key="c.id"><RouterLink :to="`/categorie/${c.id}`">{{ c.name }}</RouterLink></li>
+            <li v-for="c in collections" :key="c.id"><RouterLink :to="`/collection/${c.id}`">Collection {{ c.name }}</RouterLink></li>
             <li><RouterLink to="/favoris">Mes favoris</RouterLink></li>
             <li><RouterLink to="/panier">Mon panier</RouterLink></li>
           </ul>
@@ -38,7 +40,7 @@ const s = shop.seller
           <ul class="small"><li v-for="t in shop.terms" :key="t">{{ t }}</li></ul>
         </div>
       </div>
-      <p class="small mt-4 mb-0 opacity-75">Votre panier et vos favoris seront enregistrés.</p>
+      <p class="small mt-4 mb-0 opacity-75">Votre panier et vos favoris sont enregistrés uniquement dans ce navigateur.</p>
     </div>
   </footer>
 </template>

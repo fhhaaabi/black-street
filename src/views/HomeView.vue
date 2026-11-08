@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { products, getProductBySlug } from '../data/products.js'
 import { categories } from '../data/categories.js'
+import { collections, collectionProducts } from '../data/collections.js'
 import { isNew, isOnSale } from '../utils/product.js'
 import { onImgError } from '../utils/image.js'
 import { useParallax } from '../composables/useParallax.js'
@@ -17,9 +18,10 @@ const picks = computed(() => products.filter((p) => p.featured))
 const popular = computed(() => [...products].sort(byPopularity).slice(0, 12))
 const promos = computed(() => products.filter(isOnSale))
 const chapters = computed(() => categories.map((c) => ({ ...c, list: products.filter((p) => p.category === c.id).sort(byPopularity) })))
-const collage = computed(() => ['sweat-a-capuche', 'baskets-urbaines', 'montre-classique'].map(getProductBySlug).filter(Boolean)
-  .map((p) => ({ p, src: p.colors[0].images[2] })))
+const collage = computed(() => ['vetements', 'chaussures', 'montres'].map((c) => products.find((p) => p.category === c)).filter(Boolean)
+  .map((p) => ({ p, src: p.colors[0].images[2] ?? p.colors[0].images[0] })))
 const marquee = categories.map((c) => c.name)
+const collectionBanners = computed(() => collections.map((c) => ({ ...c, count: collectionProducts(c).length })).filter((c) => c.count))
 
 const advantages = [
   { icon: 'bi-whatsapp', title: 'Commande par WhatsApp', text: 'Vous composez votre panier, puis vous échangez directement avec le vendeur.' },
@@ -27,13 +29,11 @@ const advantages = [
   { icon: 'bi-rulers', title: 'Tailles et pointures', text: 'Les variantes indisponibles sont clairement signalées.' },
   { icon: 'bi-truck', title: 'Livraison à convenir', text: shop.delivery.note }
 ]
+// Photos du hero : cartes carrées (x, y, s = position/taille en %, r = inclinaison, d = parallaxe, t = durée du flottement)
 const floats = [
-  { img: 'sneaker', x: 20, y: 24, s: 62, d: 1.3, t: 6.5 },
-   { img: 'hoodie', x: 2, y: -2, s: 62, d: 1.7, t: 9.5 },
-  { img: 'watch', x: 60, y: -2, s: 36, d: 1.7, t: 7 },
-  //  { img: 'glasses', x: 64, y: 54, s: 34, d: 1, t: 5.5 },
-  // { img: 'cap', x: 0, y: 56, s: 32, d: 1.5, t: 7.5 }, 
-  { img: 'bag', x: 36, y: 64, s: 30, d: 0.5, t: 9 }
+  { src: '/img/float-tshirt.jpg', x: 0, y: 6, s: 46, r: -6, d: 0.8, t: 8 },
+  { src: '/img/float-watch.jpg', x: 52, y: 0, s: 42, r: 5, d: 1.6, t: 7 },
+  { src: '/img/float-sneaker.jpg', x: 24, y: 46, s: 52, r: 2, d: 1.2, t: 6.5 }
 ]
 </script>
 <template>
@@ -53,7 +53,11 @@ const floats = [
           </div>
         </div>
         <div ref="stage" class="stage" aria-hidden="true">
-           <!-- npm -->
+          <div v-for="f in floats" :key="f.src" class="fl" :style="{ '--x': f.x, '--y': f.y, '--s': f.s, '--d': f.d }">
+            <div class="ph" :style="{ '--r': f.r + 'deg' }">
+              <img :src="f.src" alt="" :style="{ '--t': f.t + 's' }" width="800" height="800" :fetchpriority="f.x === 24 ? 'high' : undefined" @error="onImgError" />
+            </div>
+          </div>
           <svg class="spin-badge" viewBox="0 0 120 120">
             <defs><path id="circ" d="M60 60 m-44 0 a44 44 0 1 1 88 0 a44 44 0 1 1 -88 0" /></defs>
             <text><textPath href="#circ">Nouvelle collection • Nouvelle collection •</textPath></text>
@@ -72,6 +76,16 @@ const floats = [
       <div class="container">
         <div class="section-head"><div><h2 id="news-title">Nouveautés</h2><p>Les derniers articles ajoutés</p></div><RouterLink :to="{ path: '/boutique', query: { tri: 'newest' } }" class="link-more">Tout voir</RouterLink></div>
         <ProductSlider :products="news" label="Nouveautés" autoplay />
+      </div>
+    </section>
+
+    <section v-for="c in collectionBanners" :key="c.id" class="section pt-0" :style="{ '--a1': c.accent[0], '--a2': c.accent[1] }">
+      <div class="container">
+        <RouterLink :to="`/collection/${c.id}`" class="promo d-block text-decoration-none" v-reveal>
+          <h2 class="grad-text" style="font-size: clamp(2.4rem, 9vw, 5rem)">{{ c.title }}</h2>
+          <p class="text-secondary mb-3" style="max-width: 50ch">{{ c.description }} {{ c.count }} articles.</p>
+          <span class="btn btn-gold">Découvrir la collection</span>
+        </RouterLink>
       </div>
     </section>
 
@@ -96,9 +110,9 @@ const floats = [
           <p class="text-secondary" style="max-width: 44ch">Couleurs, tailles, pointures : choisissez votre variante, vérifiez la photo exacte, puis envoyez votre commande en un seul message.</p>
           <RouterLink to="/boutique" class="btn btn-ink">Explorer la boutique</RouterLink>
         </div>
-        <!-- <div class="collage">
+        <div class="collage">
           <RouterLink v-for="c in collage" :key="c.p.id" :to="`/produit/${c.p.slug}`" :aria-label="c.p.name"><img :src="c.src" :alt="c.p.name" loading="lazy" width="800" height="800" @error="onImgError" /></RouterLink>
-        </div> -->
+        </div>
       </div>
     </section>
 
@@ -108,13 +122,6 @@ const floats = [
         <ProductSlider :products="picks" label="Nos sélections" autoplay />
       </div>
     </section>
-
-     <!-- <section v-if="picks.length" class="section" aria-labelledby="picks-title">
-      <div class="container">
-        <div class="section-head"><div><h2 id="picks-title">Pour femme</h2><p>Le choix de la boutique</p></div><RouterLink to="/boutique" class="link-more">Tout voir</RouterLink></div>
-        <ProductSlider :products="picks" label="Nos sélections" autoplay />
-      </div>
-    </section> -->
 
     <section v-if="promos.length" class="section" aria-labelledby="promo-title">
       <div class="container">
