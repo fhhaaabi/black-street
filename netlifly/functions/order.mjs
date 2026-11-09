@@ -150,9 +150,10 @@ export default async (req) => {
   try {
     await telegram(token, "sendMessage", { chat_id: chat, text });
   } catch (e) {
+    // `detail` : message de Telegram (ex : « chat not found »), utile pour trouver le problème de réglage. Il ne contient jamais le token.
     return json(502, {
-      error:
-        "Impossible de transmettre la commande pour le moment. Utilisez WhatsApp.",
+      error: "Impossible de transmettre la commande pour le moment.",
+      detail: String(e?.message || "").slice(0, 200),
     });
   }
 
