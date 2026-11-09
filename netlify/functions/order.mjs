@@ -1,6 +1,3 @@
-// Fonction Netlify : reçoit une commande du site, la VÉRIFIE avec le catalogue, puis l'envoie sur Telegram (texte + photos).
-// Réglages à faire dans Netlify (Site configuration > Environment variables) : TELEGRAM_BOT_TOKEN et TELEGRAM_CHAT_ID.
-// Ne mettez JAMAIS ces valeurs dans le code ni sur GitHub.
 import { products } from "../../src/data/products.js";
 import { priceInfo, getColor, sizeLabel } from "../../src/utils/product.js";
 import {

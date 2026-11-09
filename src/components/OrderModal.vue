@@ -6,11 +6,10 @@ import { useCartStore } from '../stores/cart.js'
 import { buildOrderMessage } from '../services/whatsapp.js' // sert seulement à afficher le récapitulatif
 import { validateOrderLines, validateCustomer } from '../utils/validation.js'
 import { load, save } from '../services/storage.js'
-
 const ui = useUiStore()
 const cart = useCartStore()
 const uid = useId()
-const endpoint = shop.orderEndpoint || '/api/order' // fonction Netlify qui envoie la commande sur Telegram
+const endpoint = shop.orderEndpoint || '/.netlify/functions/order' 
 
 // Coordonnées : mémorisées uniquement dans ce navigateur, pour ne pas les retaper
 const customer = reactive(load('customer', { name: '', phone: '', address: '' }, (v) =>
