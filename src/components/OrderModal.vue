@@ -3,7 +3,7 @@ import { computed, reactive, ref, watch, nextTick, useId } from 'vue'
 import { shop } from '../config/shop.js'
 import { useUiStore } from '../stores/ui.js'
 import { useCartStore } from '../stores/cart.js'
-import { buildOrderMessage } from '../services/whatsapp.js' // sert seulement à afficher le récapitulatif
+import { buildOrderMessage } from '../services/whatsapp.js' 
 import { validateOrderLines, validateCustomer } from '../utils/validation.js'
 import { load, save } from '../services/storage.js'
 const ui = useUiStore()

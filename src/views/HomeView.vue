@@ -29,16 +29,16 @@ const advantages = [
   { icon: 'bi-rulers', title: 'Tailles et pointures', text: 'Les variantes indisponibles sont clairement signalées.' },
   { icon: 'bi-truck', title: 'Livraison à convenir', text: shop.delivery.note }
 ]
-// Photos du hero : cartes carrées (x, y, s = position/taille en %, r = inclinaison, d = parallaxe, t = durée du flottement)
+
 const floats = [
-  { src: '/img/float-tshirt.jpg', x: 0, y: 6, s: 46, r: -6, d: 0.8, t: 8 },
-  { src: '/img/float-watch.jpg', x: 52, y: 0, s: 42, r: 5, d: 1.6, t: 7 },
-  { src: '/img/float-sneaker.jpg', x: 24, y: 46, s: 52, r: 2, d: 1.2, t: 6.5 }
+  { src: '/img/float-tshirt.jp', x: 0, y: 6, s: 46, r: -6, d: 0.8, t: 8 },
+  { src: '/img/float-watch.jp', x: 52, y: 0, s: 42, r: 5, d: 1.6, t: 7 },
+  { src: '/img/float-sneaker.jp', x: 24, y: 46, s: 52, r: 2, d: 1.2, t: 6.5 }
 ]
 </script>
 <template>
   <div>
-    <!-- HERO : mise en scène façon campagne, produits flottants en parallaxe -->
+   
     <section class="hero" aria-labelledby="hero-title">
       <div class="container wrap">
         <div>
@@ -54,9 +54,9 @@ const floats = [
         </div>
         <div ref="stage" class="stage" aria-hidden="true">
           <div v-for="f in floats" :key="f.src" class="fl" :style="{ '--x': f.x, '--y': f.y, '--s': f.s, '--d': f.d }">
-            <div class="ph" :style="{ '--r': f.r + 'deg' }">
+            <!-- <div class="ph" :style="{ '--r': f.r + 'deg' }">
               <img :src="f.src" alt="" :style="{ '--t': f.t + 's' }" width="800" height="800" :fetchpriority="f.x === 24 ? 'high' : undefined" @error="onImgError" />
-            </div>
+            </div> -->
           </div>
           <svg class="spin-badge" viewBox="0 0 120 120">
             <defs><path id="circ" d="M60 60 m-44 0 a44 44 0 1 1 88 0 a44 44 0 1 1 -88 0" /></defs>
@@ -111,7 +111,7 @@ const floats = [
           <RouterLink to="/boutique" class="btn btn-ink">Explorer la boutique</RouterLink>
         </div>
         <div class="collage">
-          <RouterLink v-for="c in collage" :key="c.p.id" :to="`/produit/${c.p.slug}`" :aria-label="c.p.name"><img :src="c.src" :alt="c.p.name" loading="lazy" width="800" height="800" @error="onImgError" /></RouterLink>
+          <RouterLink v-for="c in collage" :key="c.p.id" :to="`/produit/${c.p.slug}`" :aria-label="c.p.name"></RouterLink>
         </div>
       </div>
     </section>
